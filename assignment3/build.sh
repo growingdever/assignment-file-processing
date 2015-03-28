@@ -1,0 +1,1 @@
+g++ main.cpp Macro.cpp Student.cpp CourseRegistration.cpp iobuffer.cpp delim.cpp fixfld.cpp fixlen.cpp varlen.cpp length.cpp -o main
