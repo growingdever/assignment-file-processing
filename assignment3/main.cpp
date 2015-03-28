@@ -23,34 +23,35 @@ void TestBufferCourseRegistration (IOB & buffer, const string path)
 	int recaddr1;
 
 	ofstream TestOut (path, ios::out);
-	// result = buffer.WriteHeader (TestOut);
-	// cout << "write header " << result << endl;
 	course1.Pack (buffer);
 	recaddr1 = buffer.Write (TestOut);
 	cout << "write at " << recaddr1 << endl;
+	// 다 썼으니 닫기
 	TestOut.close ();
 
 
 	// test reading
 	CourseRegistration course(0, 0, 0, 0);
 
+	// file stream 생성
 	ifstream TestIn (path, ios::in);
-	// result = buffer . ReadHeader (TestIn);
-	// cout <<"read header "<<result<<endl;
-	buffer . DRead (TestIn, recaddr1);
+	buffer.DRead (TestIn, recaddr1);
 	course.Unpack (buffer);
 	cout << course.Export() << endl;
 }
 
 void BufferTestCourseRegistration() {
+	// test 1 : FiexFieldBuffer
 	FixedFieldBuffer buffer1(8);
 	CourseRegistration::InitBuffer(buffer1);
 	TestBufferCourseRegistration(buffer1, "course_fixed_field_buffer.txt");
 
+	// test 2 : LengthFieldBuffer
 	LengthFieldBuffer buffer2;
 	CourseRegistration::InitBuffer(buffer2);
 	TestBufferCourseRegistration(buffer2, "course_length_field_buffer.txt");
 
+	// test 3 : DelimFieldBuffer
 	DelimFieldBuffer::SetDefaultDelim('|');
 	DelimFieldBuffer buffer3;
 	CourseRegistration::InitBuffer(buffer3);
@@ -64,12 +65,12 @@ void TestBufferStudent (IOB & buffer, const string path)
 	int result;
 	int recaddr1;
 
+	// file stream 생성
 	ofstream TestOut (path, ios::out);
-	// result = buffer.WriteHeader (TestOut);
-	// cout << "write header " << result << endl;
 	student1.Pack (buffer);
 	recaddr1 = buffer.Write (TestOut);
 	cout << "write at " << recaddr1 << endl;
+	// 다 썼으니 닫기
 	TestOut.close ();
 
 
@@ -77,23 +78,25 @@ void TestBufferStudent (IOB & buffer, const string path)
 	Student student(student1);
 	student.SetName("Changed Name");
 
+	// file stream 생성
 	ifstream TestIn (path, ios::in);
-	// result = buffer . ReadHeader (TestIn);
-	// cout <<"read header "<<result<<endl;
-	buffer . DRead (TestIn, recaddr1);
+	buffer.DRead (TestIn, recaddr1);
 	student.Unpack (buffer);
 	cout << student.Export() << endl;
 }
 
 void BufferTestStudent() {
+	// test 1 : FiexFieldBuffer
 	FixedFieldBuffer buffer1(8);
 	Student::InitBuffer(buffer1);
 	TestBufferStudent(buffer1, "student_fixed_field_buffer.txt");
 
+	// test 2 : LengthFieldBuffer
 	LengthFieldBuffer buffer2;
 	Student::InitBuffer(buffer2);
 	TestBufferStudent(buffer2, "student_length_field_buffer.txt");
 
+	// test 3 : DelimFieldBuffer
 	DelimFieldBuffer::SetDefaultDelim('|');
 	DelimFieldBuffer buffer3;
 	Student::InitBuffer(buffer3);
@@ -107,6 +110,7 @@ int main(int argc, char const *argv[])
 	vector<CourseRegistration> courses;
 	CourseRegistration::ReadFromFile("courses.txt", courses);
 
+	// Test 돌려보자
 	BufferTestStudent();
 	BufferTestCourseRegistration();
 

@@ -105,6 +105,8 @@ string Student::Export()
 
 int Student::InitBuffer (FixedFieldBuffer &buffer)
 {
+	// FixedFieldBuffer를 위해 Field 추가해둔다.
+	// 혹시 모르니 충분한 크기로 생성
 	int result;
 	result = buffer.AddField(16);
 	result = result && buffer.AddField(16);
@@ -124,11 +126,14 @@ int Student::InitBuffer (LengthFieldBuffer & Buffer) {
 
 bool Student::Pack(IOBuffer& buffer) {
 	int numBytes;
+	// 일단 비우고
 	buffer.Clear ();
 
+	// integer들을 string으로 생성
 	string idString = to_string(_id);
 	string completedCreditHoursString = to_string(_completedCreditHours);
 
+	// string들을 모두 pack
 	numBytes = buffer.Pack (idString.c_str());
 	if (numBytes == -1) return false;
 	numBytes = buffer.Pack (_name.c_str());
@@ -147,12 +152,14 @@ bool Student::Unpack(IOBuffer& buffer) {
 	int numBytes;
 	string idString, completedCreditHoursString;
 
+	// string에 바로 unpack이 안 되므로 char array를 생성
 	char *containerID = new char[64];
 	char *containerName = new char[64];
 	char *containerAddress = new char[64];
 	char *containerEnrollment = new char[64];
 	char *containerCredit = new char[64];
 
+	// 한 번에 메모리 해제하기 편하게 vector에 박아둔다
 	vector<char*> toRelease;
 	toRelease.push_back(containerID);
 	toRelease.push_back(containerName);
@@ -186,12 +193,14 @@ bool Student::Unpack(IOBuffer& buffer) {
 		return false;
 	}
 
+	// 가져온 데이터들 다시 멤버 변수에 넣는다.
 	_id = atoi(containerID);
 	_name = string(containerName);
 	_address = string(containerAddress);
 	_dateOfFirstEnrollment = string(containerEnrollment);
 	_completedCreditHours = atoi(containerCredit);
 
+	// 메모리 릴리즈
 	release(toRelease);
 
 	return true;

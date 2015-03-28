@@ -84,6 +84,8 @@ string CourseRegistration::Export()
 
 int CourseRegistration::InitBuffer (FixedFieldBuffer &buffer)
 {
+	// FixedFieldBuffer를 위해 Field 추가해둔다.
+	// 혹시 모르니 충분한 크기로 생성
 	int result;
 	result = buffer.AddField(16);
 	result = result && buffer.AddField(16);
@@ -102,13 +104,16 @@ int CourseRegistration::InitBuffer (LengthFieldBuffer & Buffer) {
 
 bool CourseRegistration::Pack(IOBuffer& buffer) {
 	int numBytes;
+	// 일단 비우고
 	buffer.Clear ();
 
+	// integer들을 string으로 생성
 	string courseIDString = to_string(_courseID);
 	string studentIDString = to_string(_studentID);
 	string creditHourString = to_string(_creditHour);
 	string gradeString = to_string(_grade);
 
+	// string들을 모두 pack
 	numBytes = buffer.Pack (courseIDString.c_str());
 	if (numBytes == -1) return false;
 	numBytes = buffer.Pack (studentIDString.c_str());
@@ -125,11 +130,13 @@ bool CourseRegistration::Unpack(IOBuffer& buffer) {
 	int numBytes;
 	string idString, completedCreditHoursString;
 
+	// string에 바로 unpack이 안 되므로 char array를 생성
 	char *containerCourseID = new char[64];
 	char *containerStudentID = new char[64];
 	char *containerCreditHour = new char[64];
 	char *containerGrade = new char[64];
 
+	// 한 번에 메모리 해제하기 편하게 vector에 박아둔다
 	vector<char*> toRelease;
 	toRelease.push_back(containerCourseID);
 	toRelease.push_back(containerStudentID);
@@ -157,11 +164,13 @@ bool CourseRegistration::Unpack(IOBuffer& buffer) {
 		return false;
 	}
 
+	// 가져온 데이터들 다시 멤버 변수에 넣는다.
 	_courseID = stoi(containerCourseID);
 	_studentID = stoi(containerStudentID);
 	_creditHour = stoi(containerCreditHour);
 	_grade = stoi(containerGrade);
 
+	// 가져온 데이터들 다시 멤버 변수에 넣는다.
 	release(toRelease);
 
 	return true;
