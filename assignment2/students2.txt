@@ -1,0 +1,10 @@
+10/New Named!/seoul/2013.03.02/29
+20/jung1/seoul/2013.03.02/19
+30/jung2/busan/2013.03.02/48
+40/jung3/dajeon/2013.03.03/19
+50/jung4/gwuangju/2013.03.03/48
+60/jung5/daegoo/2013.03.04/19
+70/jung6/incheon/2013.03.04/48
+80/jung7/ulsan/2013.03.05/19
+90/jung8/sejong/2013.03.05/48
+100/jung juhong/kimhae-si/2013.03.02/76
