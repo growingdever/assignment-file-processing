@@ -1,0 +1,1 @@
+g++ main.cpp Macro.cpp Student.cpp iobuffer.cpp fixfld.cpp fixlen.cpp buffile.cpp -o main
