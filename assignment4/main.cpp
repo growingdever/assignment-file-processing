@@ -42,7 +42,7 @@ void TestBufferStudent (IOB & buffer, const string& path)
 
 	int delete_pk_id = 11;
 	cout << "delete student id == " << delete_pk_id << endl;
-	TestOut.Delete(delete_pk_id);
+	TestOut.Delete(3, delete_pk_id);
 
 	TestOut.Close ();
 
