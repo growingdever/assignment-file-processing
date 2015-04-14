@@ -92,7 +92,7 @@ Student Student::CreateFromInput()
 	return student;
 }
 
-string Student::Str()
+string Student::Str() const
 {
 	ostringstream ss;
 	if( _alive ) {

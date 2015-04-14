@@ -50,6 +50,9 @@ public:
 		_completedCreditHours += i;
 	}
 
+	bool GetAlive() {
+		return _alive;
+	}
 	void SetAlive(bool alive) {
 		_alive = alive;
 	}
@@ -58,7 +61,7 @@ public:
 	static void ReadFromFile(string path, vector<Student>& ret);
 	static Student CreateFromData(string str);
 	static Student CreateFromInput();
-	string Str();
+	string Str() const;
 
 	static int InitBuffer (FixedFieldBuffer &);
 	static int GetLengthForFixedFieldBuffer();
