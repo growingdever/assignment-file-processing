@@ -30,7 +30,7 @@ void TestBufferStudent (IOB & buffer, const string& path)
 	int recaddr1, recaddr2, recaddr3;
 
 	BufferFile TestOut(buffer);
-	result = TestOut.Open(path.c_str(), ios::out | ios::in);
+	result = TestOut.Create(path.c_str(), ios::out | ios::in);
 	if ( ! result ) {
 		cout << "Failed to open file " << path << endl;
 		return;
