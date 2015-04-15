@@ -13,13 +13,17 @@ vector<Student> students;
 Student student1(10, "jung", "kimhae", "2013.03.02", 19);
 Student student2(11, "ju", "seoul", "2013.03.02", 38);
 Student student3(12, "hong", "city1234", "2013.03.02", 57);
+Student student4(13, "growingdever", "city5678", "2013.03.02", 57);
 
 
-void print_students() {
-	for( int i = 0; i < students.size(); i ++ ) {
-		const Student& student = students[i];
-		printf("record(%d) : %s\n", i + 1, student.Str().c_str());
-	}
+void print_student(const Student& student) {
+	printf("record : %s\n", student.Str().c_str());
+}
+
+template <class BufferFile>
+void delete_student(BufferFile& bufferFile, int target_pk_id) {
+	cout << "delete student id : " << target_pk_id << endl;
+	bufferFile.Delete(students.size(), target_pk_id);
 }
 
 
@@ -27,7 +31,7 @@ template <class IOB>
 void TestBufferStudent (IOB & buffer, const string& path)
 {	
 	int result;
-	int recaddr1, recaddr2, recaddr3;
+	int recaddr1, recaddr2, recaddr3, recaddr4;
 
 	BufferFile TestOut(buffer);
 	result = TestOut.Create(path.c_str(), ios::out | ios::in);
@@ -48,6 +52,13 @@ void TestBufferStudent (IOB & buffer, const string& path)
 	recaddr3 = TestOut.Write ();
 	cout << "write at " << recaddr3 << endl;
 
+	student4.Pack (buffer);
+	recaddr4 = TestOut.Write ();
+	cout << "write at " << recaddr4 << endl;
+
+	delete_student(TestOut, 11);
+	delete_student(TestOut, 12);
+
 	TestOut.Close ();
 
 
@@ -58,41 +69,23 @@ void TestBufferStudent (IOB & buffer, const string& path)
 
 	BufferFile TestIn (buffer);
 	TestIn.Open (path.c_str(), ios::out | ios::in);
-	
-	TestIn.Read (recaddr3);
-	student.Unpack (buffer);
-	students.push_back(student);
-	
-	TestIn.Read (recaddr2);
-	student.Unpack (buffer);
-	students.push_back(student);
-	
+
 	TestIn.Read (recaddr1);
 	student.Unpack (buffer);
-	students.push_back(student);
+	print_student(student);
 
-	print_students();
-
-	int delete_pk_id = 11;
-	cout << "delete student id == " << delete_pk_id << endl;
-	TestIn.Delete(students.size(), delete_pk_id);
-
-	students.clear();
+	TestIn.Read (recaddr2);
+	student.Unpack (buffer);
+	print_student(student);
 
 	TestIn.Read (recaddr3);
 	student.Unpack (buffer);
-	students.push_back(student);
-	
-	TestIn.Read (recaddr2);
-	student.Unpack (buffer);
-	students.push_back(student);
-	
-	TestIn.Read (recaddr1);
-	student.Unpack (buffer);
-	students.push_back(student);
+	print_student(student);
 
-	print_students();
-	
+	TestIn.Read (recaddr4);
+	student.Unpack (buffer);
+	print_student(student);
+
 	result = TestIn.Read(recaddr3 * 2);
 	if (result!= -1) {
 		cout << "Read past end of file! Error." << endl;
@@ -107,6 +100,7 @@ void BufferTestStudent() {
 
 	students.push_back(student1);
 	students.push_back(student2);
+	students.push_back(student3);
 	students.push_back(student3);
 
 	TestBufferStudent(buffer, "student_fixed_field_buffer.txt");
