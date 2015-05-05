@@ -1,0 +1,2 @@
+rm -rf ./main;
+g++ -o main main.cpp Buffer.cpp BufferFixedLength.cpp BufferFixedField.cpp BufferVariableLength.cpp BufferDelimField.cpp BufferFile.cpp IndexCollection.cpp SecondaryIndex.cpp Record.cpp;
